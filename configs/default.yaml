@@ -1,0 +1,46 @@
+# Multimodal Health Risk Communicator Configuration
+
+# Model settings
+model:
+  id: "google/medgemma-4b-it"
+  device: "auto"  # auto, cuda, mps, cpu
+  dtype: "bfloat16"
+  max_new_tokens: 1024
+  temperature: 0.7
+
+# Data paths (relative to project root)
+data:
+  base_dir: "data"
+  retinal_dir: "data/retinal_photography"
+  cgm_dir: "data/wearable_blood_glucose"
+  clinical_dir: "data/clinical_data"
+  participants_file: "data/participants.tsv"
+
+# Azure Storage settings
+azure:
+  storage_account: "nwaireadi2026"
+  container: "aireadi-data"
+  # SAS token loaded from environment: AZURE_SAS_TOKEN
+
+# CGM analysis settings
+cgm:
+  low_threshold: 70
+  high_threshold: 180
+  very_low_threshold: 54
+  very_high_threshold: 250
+
+# DICOM processing
+dicom:
+  target_size: null  # null for original size, or [width, height]
+  color_space_conversion: true
+
+# Report generation
+report:
+  reading_level: "8th grade"
+  include_recommendations: true
+  include_questions: true
+
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
