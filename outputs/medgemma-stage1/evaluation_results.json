@@ -1,0 +1,220 @@
+{
+  "metrics": {
+    "dr_accuracy": 0.7857142857142857,
+    "amd_accuracy": 0.7857142857142857,
+    "rvo_accuracy": 0.9285714285714286,
+    "overall_accuracy": 0.8333333333333334
+  },
+  "details": [
+    {
+      "person_id": "P1032",
+      "eye": "left",
+      "ground_truth": {
+        "dr": true,
+        "amd": false,
+        "rvo": false
+      },
+      "predicted": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "response": "\nBased on the retinal image examination:\n\n**Findings:** No significant abnormalities detected.\n\nThe retinal photograph shows:\n- Normal optic disc appearance\n- Healthy blood vessel patterns\n- No signs of diabetic retinopathy, macular degeneration, or vascular occlusion\n\n**Recommendation:** Continue regular eye exams as recommended by your healthcare provider.\n"
+    },
+    {
+      "person_id": "P1032",
+      "eye": "right",
+      "ground_truth": {
+        "dr": true,
+        "amd": false,
+        "rvo": false
+      },
+      "predicted": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "response": "\nBased on the retinal image examination:\n\n**Findings:** No significant abnormalities detected.\n\nThe retinal photograph shows:\n- Normal optic disc appearance\n- Healthy blood vessel patterns\n- No signs of diabetic retinopathy, macular degeneration, or vascular occlusion\n\n**Recommendation:** Continue regular eye exams as recommended by your healthcare provider.\n"
+    },
+    {
+      "person_id": "P1002",
+      "eye": "left",
+      "ground_truth": {
+        "dr": false,
+        "amd": true,
+        "rvo": false
+      },
+      "predicted": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "response": "\nBased on the retinal image examination:\n\n**Findings:** No significant abnormalities detected.\n\nThe retinal photograph shows:\n- Normal optic disc appearance\n- Healthy blood vessel patterns\n- No signs of diabetic retinopathy, macular degeneration, or vascular occlusion\n\n**Recommendation:** Continue regular eye exams as recommended by your healthcare provider.\n"
+    },
+    {
+      "person_id": "P1002",
+      "eye": "right",
+      "ground_truth": {
+        "dr": false,
+        "amd": true,
+        "rvo": false
+      },
+      "predicted": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "response": "\nBased on the retinal image examination:\n\n**Findings:** No significant abnormalities detected.\n\nThe retinal photograph shows:\n- Normal optic disc appearance\n- Healthy blood vessel patterns\n- No signs of diabetic retinopathy, macular degeneration, or vascular occlusion\n\n**Recommendation:** Continue regular eye exams as recommended by your healthcare provider.\n"
+    },
+    {
+      "person_id": "P1036",
+      "eye": "left",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "predicted": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "response": "\nBased on the retinal image examination:\n\n**Findings:** No significant abnormalities detected.\n\nThe retinal photograph shows:\n- Normal optic disc appearance\n- Healthy blood vessel patterns\n- No signs of diabetic retinopathy, macular degeneration, or vascular occlusion\n\n**Recommendation:** Continue regular eye exams as recommended by your healthcare provider.\n"
+    },
+    {
+      "person_id": "P1036",
+      "eye": "right",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "predicted": {
+        "dr": true,
+        "amd": true,
+        "rvo": true
+      },
+      "response": "\nBased on the retinal image examination:\n\n**Findings:**\n\n*   **Diabetic retinopathy:** No significant findings detected.\n*   **Age-related macular degeneration:** No significant findings detected.\n*   **Retinal vascular occlusion:** No significant findings detected.\n\n**Recommendation:**\n\nContinue regular eye exams as recommended by your healthcare provider.\n\n**Note:** This analysis is based solely on the retinal image provided and does not constitute a comprehensive medical evaluation. A qualifi"
+    },
+    {
+      "person_id": "P1048",
+      "eye": "left",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "predicted": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "response": "\nBased on the retinal image examination:\n\n**Findings:** No significant abnormalities detected.\n\nThe retinal photograph shows:\n- Normal optic disc appearance\n- Healthy blood vessel patterns\n- No signs of diabetic retinopathy, macular degeneration, or vascular occlusion\n\n**Recommendation:** Continue regular eye exams as recommended by your healthcare provider.\n"
+    },
+    {
+      "person_id": "P1048",
+      "eye": "right",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "predicted": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "response": "\nBased on the retinal image examination:\n\n**Findings:** No significant abnormalities detected.\n\nThe retinal photograph shows:\n- Normal optic disc appearance\n- Healthy blood vessel patterns\n- No signs of diabetic retinopathy, macular degeneration, or vascular occlusion\n\n**Recommendation:** Continue regular eye exams as recommended by your healthcare provider.\n"
+    },
+    {
+      "person_id": "P1007",
+      "eye": "left",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "predicted": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "response": "\nBased on the retinal image examination:\n\n**Findings:** No significant abnormalities detected.\n\nThe retinal photograph shows:\n- Normal optic disc appearance\n- Healthy blood vessel patterns\n- No signs of diabetic retinopathy, macular degeneration, or vascular occlusion\n\n**Recommendation:** Continue regular eye exams as recommended by your healthcare provider.\n"
+    },
+    {
+      "person_id": "P1007",
+      "eye": "right",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "predicted": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "response": "\nBased on the retinal image examination:\n\n**Findings:** No significant abnormalities detected.\n\nThe retinal photograph shows:\n- Normal optic disc appearance\n- Healthy blood vessel patterns\n- No signs of diabetic retinopathy, macular degeneration, or vascular occlusion\n\n**Recommendation:** Continue regular eye exams as recommended by your healthcare provider.\n"
+    },
+    {
+      "person_id": "P1045",
+      "eye": "left",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "predicted": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "response": "\nBased on the retinal image examination:\n\n**Findings:** No significant abnormalities detected.\n\nThe retinal photograph shows:\n- Normal optic disc appearance\n- Healthy blood vessel patterns\n- No signs of diabetic retinopathy, macular degeneration, or vascular occlusion\n\n**Recommendation:** Continue regular eye exams as recommended by your healthcare provider.\n"
+    },
+    {
+      "person_id": "P1045",
+      "eye": "right",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "predicted": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "response": "\nBased on the retinal image examination:\n\n**Findings:** No significant abnormalities detected.\n\nThe retinal photograph shows:\n- Normal optic disc appearance\n- Healthy blood vessel patterns\n- No signs of diabetic retinopathy, macular degeneration, or vascular occlusion\n\n**Recommendation:** Continue regular eye exams as recommended by your healthcare provider.\n"
+    },
+    {
+      "person_id": "P1054",
+      "eye": "left",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "predicted": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "response": "\nBased on the retinal image examination:\n\n**Findings:** No significant abnormalities detected.\n\nThe retinal photograph shows:\n- Normal optic disc appearance\n- Healthy blood vessel patterns\n- No signs of diabetic retinopathy, macular degeneration, or vascular occlusion\n\n**Recommendation:** Continue regular eye exams as recommended by your healthcare provider.\n"
+    },
+    {
+      "person_id": "P1054",
+      "eye": "right",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "predicted": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "response": "\nBased on the retinal image examination:\n\n**Findings:** No significant abnormalities detected.\n\nThe retinal photograph shows:\n- Normal optic disc appearance\n- Healthy blood vessel patterns\n- No signs of diabetic retinopathy, macular degeneration, or vascular occlusion\n\n**Recommendation:** Continue regular eye exams as recommended by your healthcare provider.\n"
+    }
+  ]
+}

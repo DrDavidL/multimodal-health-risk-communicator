@@ -1,0 +1,132 @@
+{
+  "model": "qizunlee/medgemma-4b-it-sft-lora-diabetic-retinopathy",
+  "results": [
+    {
+      "person_id": "P1032",
+      "eye": "left",
+      "original_id": "1373",
+      "ground_truth_dr": true,
+      "probability": 0.00010809747967242378,
+      "raw_yes": 0.00010809438390424475,
+      "raw_no": 0.9998632669448853
+    },
+    {
+      "person_id": "P1032",
+      "eye": "right",
+      "original_id": "1373",
+      "ground_truth_dr": true,
+      "probability": 0.005029256615040168,
+      "raw_yes": 0.005028663668781519,
+      "raw_no": 0.9948534369468689
+    },
+    {
+      "person_id": "P1002",
+      "eye": "left",
+      "original_id": "7285",
+      "ground_truth_dr": false,
+      "probability": 3.080772100926467e-05,
+      "raw_yes": 3.0807219445705414e-05,
+      "raw_no": 0.9999529123306274
+    },
+    {
+      "person_id": "P1002",
+      "eye": "right",
+      "original_id": "7285",
+      "ground_truth_dr": false,
+      "probability": 4.481746117429295e-05,
+      "raw_yes": 4.481658470467664e-05,
+      "raw_no": 0.9999356269836426
+    },
+    {
+      "person_id": "P1036",
+      "eye": "left",
+      "original_id": "7150",
+      "ground_truth_dr": false,
+      "probability": 7.480890924926775e-05,
+      "raw_yes": 7.48072998248972e-05,
+      "raw_no": 0.999903678894043
+    },
+    {
+      "person_id": "P1036",
+      "eye": "right",
+      "original_id": "7150",
+      "ground_truth_dr": false,
+      "probability": 0.00012288229016866012,
+      "raw_yes": 0.00012287906429264694,
+      "raw_no": 0.999850869178772
+    },
+    {
+      "person_id": "P1048",
+      "eye": "left",
+      "original_id": "1524",
+      "ground_truth_dr": false,
+      "probability": 7.103268123692086e-05,
+      "raw_yes": 7.103029201971367e-05,
+      "raw_no": 0.9998953342437744
+    },
+    {
+      "person_id": "P1048",
+      "eye": "right",
+      "original_id": "1524",
+      "ground_truth_dr": false,
+      "probability": 5.944950434175262e-05,
+      "raw_yes": 5.944809890934266e-05,
+      "raw_no": 0.9999169111251831
+    },
+    {
+      "person_id": "P1007",
+      "eye": "left",
+      "original_id": "7149",
+      "ground_truth_dr": false,
+      "probability": 4.059624116899447e-05,
+      "raw_yes": 4.059548882651143e-05,
+      "raw_no": 0.9999408721923828
+    },
+    {
+      "person_id": "P1007",
+      "eye": "right",
+      "original_id": "7149",
+      "ground_truth_dr": false,
+      "probability": 3.937464238680912e-05,
+      "raw_yes": 3.937395376851782e-05,
+      "raw_no": 0.9999431371688843
+    },
+    {
+      "person_id": "P1045",
+      "eye": "left",
+      "original_id": "4381",
+      "ground_truth_dr": false,
+      "probability": 0.0002388482788802771,
+      "raw_yes": 0.00023884027905296534,
+      "raw_no": 0.9997276663780212
+    },
+    {
+      "person_id": "P1045",
+      "eye": "right",
+      "original_id": "4381",
+      "ground_truth_dr": false,
+      "probability": 0.007430648026103984,
+      "raw_yes": 0.007429950404912233,
+      "raw_no": 0.9924761652946472
+    },
+    {
+      "person_id": "P1054",
+      "eye": "left",
+      "original_id": "1526",
+      "ground_truth_dr": false,
+      "probability": 3.263705788499331e-05,
+      "raw_yes": 3.2636333344271407e-05,
+      "raw_no": 0.9999451637268066
+    },
+    {
+      "person_id": "P1054",
+      "eye": "right",
+      "original_id": "1526",
+      "ground_truth_dr": false,
+      "probability": 2.8864219485544818e-05,
+      "raw_yes": 2.8863607440143824e-05,
+      "raw_no": 0.9999499320983887
+    }
+  ],
+  "recommendation": "Use threshold \u2264 0.000 for 100% sensitivity"
+}

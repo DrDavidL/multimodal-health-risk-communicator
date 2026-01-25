@@ -1,0 +1,126 @@
+{
+  "model": "qizunlee/medgemma-4b-it-sft-lora-diabetic-retinopathy",
+  "metrics": {
+    "sensitivity": 0.5,
+    "specificity": 0.9166666666666666,
+    "accuracy": 0.8571428571428571,
+    "tp": 1,
+    "fp": 1,
+    "tn": 11,
+    "fn": 1
+  },
+  "details": [
+    {
+      "person_id": "P1032",
+      "eye": "left",
+      "ground_truth_dr": true,
+      "predicted_dr": false,
+      "predicted_grade": "A",
+      "response": "\nA: No apparent retinopathy (No DR)"
+    },
+    {
+      "person_id": "P1032",
+      "eye": "right",
+      "ground_truth_dr": true,
+      "predicted_dr": true,
+      "predicted_grade": "B",
+      "response": "\nB: Mild nonproliferative diabetic retinopathy (Mild NPDR)"
+    },
+    {
+      "person_id": "P1002",
+      "eye": "left",
+      "ground_truth_dr": false,
+      "predicted_dr": false,
+      "predicted_grade": "A",
+      "response": "\nA: No apparent retinopathy (No DR)"
+    },
+    {
+      "person_id": "P1002",
+      "eye": "right",
+      "ground_truth_dr": false,
+      "predicted_dr": false,
+      "predicted_grade": "A",
+      "response": "\nA: No apparent retinopathy (No DR)"
+    },
+    {
+      "person_id": "P1036",
+      "eye": "left",
+      "ground_truth_dr": false,
+      "predicted_dr": false,
+      "predicted_grade": "A",
+      "response": "\nA: No apparent retinopathy (No DR)"
+    },
+    {
+      "person_id": "P1036",
+      "eye": "right",
+      "ground_truth_dr": false,
+      "predicted_dr": false,
+      "predicted_grade": "A",
+      "response": "\nA: No apparent retinopathy (No DR)"
+    },
+    {
+      "person_id": "P1048",
+      "eye": "left",
+      "ground_truth_dr": false,
+      "predicted_dr": false,
+      "predicted_grade": "A",
+      "response": "\nA: No apparent retinopathy (No DR)"
+    },
+    {
+      "person_id": "P1048",
+      "eye": "right",
+      "ground_truth_dr": false,
+      "predicted_dr": false,
+      "predicted_grade": "A",
+      "response": "\nA: No apparent retinopathy (No DR)"
+    },
+    {
+      "person_id": "P1007",
+      "eye": "left",
+      "ground_truth_dr": false,
+      "predicted_dr": false,
+      "predicted_grade": "A",
+      "response": "\nA: No apparent retinopathy (No DR)"
+    },
+    {
+      "person_id": "P1007",
+      "eye": "right",
+      "ground_truth_dr": false,
+      "predicted_dr": false,
+      "predicted_grade": "A",
+      "response": "\nA: No apparent retinopathy (No DR)"
+    },
+    {
+      "person_id": "P1045",
+      "eye": "left",
+      "ground_truth_dr": false,
+      "predicted_dr": false,
+      "predicted_grade": "A",
+      "response": "\nA: No apparent retinopathy (No DR)"
+    },
+    {
+      "person_id": "P1045",
+      "eye": "right",
+      "ground_truth_dr": false,
+      "predicted_dr": true,
+      "predicted_grade": "B",
+      "response": "\nB: Mild nonproliferative diabetic retinopathy (Mild NPDR)"
+    },
+    {
+      "person_id": "P1054",
+      "eye": "left",
+      "ground_truth_dr": false,
+      "predicted_dr": false,
+      "predicted_grade": "A",
+      "response": "\nA: No apparent retinopathy (No DR)"
+    },
+    {
+      "person_id": "P1054",
+      "eye": "right",
+      "ground_truth_dr": false,
+      "predicted_dr": false,
+      "predicted_grade": "A",
+      "response": "\nA: No apparent retinopathy (No DR)"
+    }
+  ]
+}

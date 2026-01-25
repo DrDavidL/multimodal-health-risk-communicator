@@ -16,11 +16,12 @@ data:
   clinical_dir: "data/clinical_data"
   participants_file: "data/participants.tsv"
 
-# Azure Storage settings
+# Azure Storage settings - credentials loaded from environment variables
+# Set AIREADI_STORAGE_ACCOUNT, AIREADI_CONTAINER, AIREADI_BLOB_PREFIX
 azure:
-  storage_account: "nwaireadi2026"
-  container: "aireadi-data"
-  # SAS token loaded from environment: AZURE_SAS_TOKEN
+  storage_account: "${AIREADI_STORAGE_ACCOUNT}"
+  container: "${AIREADI_CONTAINER}"
+  # All Azure credentials should be set via environment variables (DUA protected)
 
 # CGM analysis settings
 cgm:

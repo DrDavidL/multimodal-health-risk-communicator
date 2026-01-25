@@ -9,9 +9,11 @@ This project uses the **AI-READI** (Artificial Intelligence Ready and Equitable 
 ## Storage Location
 
 ```
-Azure Storage Account: nwaireadi2026
-Container: aireadi-data
+Azure Storage Account: $AIREADI_STORAGE_ACCOUNT  # Set via environment variable
+Container: $AIREADI_CONTAINER                     # Set via environment variable
 ```
+
+**Note**: Actual credentials are provided separately under the Data Use Agreement and should be set as environment variables, not committed to the repository.
 
 ## Data Structure
 
@@ -155,30 +157,34 @@ sub-003	55	M	Control
 ## Data Access Commands
 
 ```bash
+# Set credentials from your DUA (do not commit these values)
+export AIREADI_STORAGE_ACCOUNT="your-storage-account"
+export AIREADI_CONTAINER="your-container-name"
+
 # List container contents
 az storage blob list \
-    --account-name nwaireadi2026 \
-    --container-name aireadi-data \
+    --account-name "$AIREADI_STORAGE_ACCOUNT" \
+    --container-name "$AIREADI_CONTAINER" \
     --output table
 
 # Download metadata files
 az storage blob download \
-    --account-name nwaireadi2026 \
-    --container-name aireadi-data \
+    --account-name "$AIREADI_STORAGE_ACCOUNT" \
+    --container-name "$AIREADI_CONTAINER" \
     --name participants.tsv \
     --file ./data/participants.tsv
 
 # Download structure documentation
 az storage blob download \
-    --account-name nwaireadi2026 \
-    --container-name aireadi-data \
+    --account-name "$AIREADI_STORAGE_ACCOUNT" \
+    --container-name "$AIREADI_CONTAINER" \
     --name dataset_structure_description.json \
     --file ./data/dataset_structure_description.json
 
 # Download single participant's data (example)
 az storage blob download-batch \
-    --account-name nwaireadi2026 \
-    --container-name aireadi-data \
+    --account-name "$AIREADI_STORAGE_ACCOUNT" \
+    --container-name "$AIREADI_CONTAINER" \
     --destination ./data \
     --pattern "*/sub-001/*"
 ```

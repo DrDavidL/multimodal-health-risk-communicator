@@ -2,6 +2,8 @@
 torch>=2.0.0
 transformers>=4.37.0
 accelerate>=0.25.0
+peft>=0.7.0  # LoRA fine-tuning
+bitsandbytes>=0.41.0  # Quantization (optional)
 
 # Image Processing
 Pillow>=10.0.0
@@ -14,6 +16,7 @@ numpy>=1.24.0
 # Azure
 azure-storage-blob>=12.19.0
 azure-identity>=1.15.0
+openai>=1.40.0  # For Azure OpenAI client
 
 # Configuration
 pyyaml>=6.0
