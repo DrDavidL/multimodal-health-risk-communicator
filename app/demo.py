@@ -154,34 +154,33 @@ def analyze_retina(
     preset = SensitivityPreset(sensitivity_preset.lower())
     threshold = SENSITIVITY_THRESHOLDS[preset]
 
-    # TODO: Replace with actual DR detection
-    # For demo, we'll simulate based on image characteristics
-    # In production: from src.models import DRDetector
-    # detector = DRDetector(threshold=threshold)
-    # result = detector.detect(image)
+    # Try to use actual DR detector if available
+    try:
+        from src.models import DRDetector as ActualDRDetector
+        detector = ActualDRDetector(threshold=threshold)
+        result = detector.detect(image)
+        p_dr = result.p_dr
+        has_dr = result.has_dr
+        grade_code = result.predicted_grade
+        using_real_model = True
+    except Exception as e:
+        # Fallback to simulated results for demo/testing
+        import random
+        random.seed(hash(str(image.size)))  # Deterministic for same image
+        p_dr = random.uniform(0.05, 0.85)
+        has_dr = p_dr >= threshold
+        grade_code = "B" if p_dr >= 0.3 else "A"
+        using_real_model = False
 
-    # Simulated result for demo skeleton
-    # This will be replaced with actual model inference
-    import random
-    random.seed(hash(str(image.size)))  # Deterministic for same image
-    simulated_p_dr = random.uniform(0.05, 0.85)
-
-    p_dr = simulated_p_dr
-    has_dr = p_dr >= threshold
-
-    # Determine predicted grade based on probability
-    if p_dr >= 0.8:
-        grade = "Moderate to Severe"
-        grade_code = "C-D"
-    elif p_dr >= 0.5:
-        grade = "Mild to Moderate"
-        grade_code = "B-C"
-    elif p_dr >= threshold:
-        grade = "Mild"
-        grade_code = "B"
-    else:
-        grade = "No apparent retinopathy"
-        grade_code = "A"
+    # Determine grade description based on grade code
+    grade_descriptions = {
+        "A": "No apparent retinopathy",
+        "B": "Mild",
+        "C": "Moderate",
+        "D": "Severe",
+        "E": "Proliferative",
+    }
+    grade = grade_descriptions.get(grade_code, "Unknown")
 
     urgency, urgency_color, urgency_action = get_urgency_display(p_dr)
 
@@ -205,7 +204,7 @@ def analyze_retina(
 
 ---
 *Sensitivity: {preset.value.title()} (threshold: {threshold})*
-*Using community DR model: [qizunlee/medgemma-4b-it-sft-lora-diabetic-retinopathy](https://huggingface.co/qizunlee/medgemma-4b-it-sft-lora-diabetic-retinopathy)*
+*Model: {"MedGemma + DR LoRA" if using_real_model else "Simulation (model not loaded)"}*
 """
 
     # Build clinical context

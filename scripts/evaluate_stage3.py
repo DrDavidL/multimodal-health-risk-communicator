@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""Stage 3: End-to-End Evaluation.
+"""Stage 3: End-to-End Evaluation with Probabilistic Communication.
 
-Tests the doubly fine-tuned MedGemma model on its ability to:
-1. Infer retinal findings from images (learned in Stage 1)
-2. Generate patient reports (learned in Stage 2)
-
-WITHOUT providing retinal findings metadata - the model must see the image
-and determine findings itself.
+Tests the complete pipeline:
+1. DR detection from images using pre-trained community LoRA
+2. Probabilistic report generation using our Stage 2 fine-tuned model
 
 Comparison:
-- MedGemma (fine-tuned): Image + Clinical + CGM → Report (no findings provided)
-- GPT-5.2 (baseline): Retinal Findings + Clinical + CGM → Report (findings provided)
+- MedGemma Pipeline: Image → P(DR) → Probabilistic Report (findings inferred)
+- GPT-5.2 Baseline: Ground Truth Findings → Report (findings provided)
 
-This demonstrates whether MedGemma learned meaningful visual understanding.
+This demonstrates:
+- Visual understanding (inferring DR from images)
+- Probabilistic communication (natural frequencies)
+- Edge AI deployment (runs locally without cloud)
 """
 
 import sys
