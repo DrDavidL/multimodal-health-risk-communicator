@@ -45,7 +45,7 @@ Fine-tuning runs entirely on-device using MPS (Metal Performance Shaders):
 | `device_map={"": "mps"}` | Load model directly to MPS, avoiding CPU→GPU copy |
 | `torch_dtype=torch.float32` | Float32 for numerical stability (float16 caused NaN loss) |
 | `torch.compile(backend="aot_eager")` | JIT compilation for ~15% speedup |
-| LoRA rank=8 | Low-rank adaptation with 0.14% trainable parameters |
+| LoRA rank=16 | Low-rank adaptation with 0.76% trainable parameters |
 | Manual training loop | Better MPS compatibility than HF Trainer |
 | Gradient accumulation=4 | Effective batch size of 4 with batch_size=1 |
 
@@ -53,52 +53,72 @@ Fine-tuning runs entirely on-device using MPS (Metal Performance Shaders):
 
 ### 3-Stage Fine-Tuning Pipeline
 
-We use a novel 3-stage approach that demonstrates learned visual understanding:
+We use a novel 3-stage approach with **dual LoRA adapters** on a single MedGemma 4B base model, swapped at inference time:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ STAGE 1: Visual Understanding                                           │
+│ STAGE 1: Visual Understanding (Community DR LoRA Adapter)               │
 │ ┌──────────────┐                     ┌─────────────────────────────┐   │
-│ │Retinal Image │ ──── MedGemma ────▶ │ Retinal Findings Detection  │   │
-│ └──────────────┘     (fine-tuned)    │ (DR, AMD, RVO)              │   │
+│ │Retinal Image │ ──── MedGemma ────▶ │ DR Grade Probabilities      │   │
+│ └──────────────┘   + DR LoRA adapter │ P(A), P(B), P(C), P(D), P(E)│  │
 │                                       └─────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────────────┘
                                     │
+                          (swap adapter)
+                                    │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ STAGE 2: Report Generation (Text-Only)                                  │
+│ STAGE 2: Report Generation (Our Novel LoRA Adapter, Text-Only)          │
 │ ┌──────────────┐                                                        │
-│ │ Retinal      │                     ┌─────────────────────────────┐   │
-│ │ Findings     │                     │                             │   │
+│ │ P(DR) score  │                     ┌─────────────────────────────┐   │
 │ ├──────────────┤ ──── MedGemma ────▶ │  Patient-Friendly Report   │   │
-│ │ Clinical     │     (fine-tuned)    │                             │   │
-│ ├──────────────┤                     └─────────────────────────────┘   │
+│ │ Clinical     │  + Report LoRA      │  (probabilistic framing)   │   │
+│ ├──────────────┤    adapter          └─────────────────────────────┘   │
 │ │ CGM Data     │                                                        │
 │ └──────────────┘                                                        │
 └─────────────────────────────────────────────────────────────────────────┘
                                     │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ STAGE 3: End-to-End Evaluation                                          │
-│ ┌──────────────┐                     ┌─────────────────────────────┐   │
-│ │Retinal Image │                     │                             │   │
-│ ├──────────────┤ ──── MedGemma ────▶ │  Patient-Friendly Report   │   │
-│ │ Clinical     │  (doubly fine-tuned)│  (findings inferred from   │   │
-│ ├──────────────┤                     │   image, not provided!)    │   │
-│ │ CGM Data     │                     └─────────────────────────────┘   │
+│ STAGE 3: End-to-End Inference (Both Adapters, Sequential)               │
+│ ┌──────────────┐   DR LoRA    ┌────────────┐  Report LoRA ┌─────────┐ │
+│ │Retinal Image │ ──adapter──▶ │ P(DR)=0.42 │ ──adapter──▶ │ Patient │ │
+│ ├──────────────┤  (swap #1)   └────────────┘  (swap #2)   │ Report  │ │
+│ │ Clinical     │ ─────────────────────────────────────────▶│         │ │
+│ ├──────────────┤                                           └─────────┘ │
+│ │ CGM Data     │                                                        │
 │ └──────────────┘                                                        │
-│        ⚠️ NO retinal findings metadata provided                         │
+│   Key: adapters swapped on SAME base model via model.set_adapter()      │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
+
+### Dual-Adapter Architecture
+
+Both adapters share a single MedGemma 4B base model (~8GB). At inference time,
+adapters are swapped via PEFT's `model.set_adapter()`:
+
+| Component | Adapter | Size | Task |
+|-----------|---------|------|------|
+| DR Detection | Community LoRA | ~30MB | Image → P(DR) |
+| Report Gen | Our Stage 2 LoRA | ~30MB | Text → Patient report |
+| Lifestyle Q&A | Same as Report | -- | Grounded Q&A |
+
+Total memory: ~8GB base + ~60MB adapters = fits T4 GPU (16GB)
+
+The key insight is **adapter swapping, not stacked/chained fine-tuning**. Each adapter
+was trained independently on the base model. At inference, Stage 3 loads the DR adapter
+first to produce grade probabilities from the retinal image, then swaps to the Report
+adapter to generate the patient-friendly report using those probabilities plus clinical
+and CGM data.
 
 ### Comparison to Baseline
 
 | Model | Input | Retinal Findings |
 |-------|-------|------------------|
-| **MedGemma (ours)** | Image + Clinical + CGM | Must infer from image |
+| **MedGemma (ours)** | Image + Clinical + CGM | Inferred via DR LoRA adapter |
 | **GPT-5.2 (baseline)** | Text only | Provided as metadata |
 
-This demonstrates that MedGemma **learned to see** diabetic retinopathy, not just explain pre-labeled findings.
+This demonstrates that MedGemma with dual adapters can **detect and communicate** diabetic retinopathy end-to-end, not just explain pre-labeled findings.
 
 ## Project Structure
 
@@ -131,6 +151,7 @@ multimodal-health-risk-communicator/
 │   ├── run_stage1_training.py   # Train visual understanding
 │   ├── run_stage2_training.py   # Train report generation
 │   ├── evaluate_stage3.py       # End-to-end evaluation
+│   ├── convert_adapter.py       # Strip torch.compile prefix for adapter compatibility
 │   └── azure_query.py           # BAA-compliant Azure GPT-5.2 queries
 ├── docs/
 │   ├── ARCHITECTURE.md          # System architecture
@@ -138,7 +159,7 @@ multimodal-health-risk-communicator/
 │   └── EVALUATION_PLAN.md       # Evaluation methodology
 ├── outputs/                     # Model weights and results
 │   ├── medgemma-stage1/         # Stage 1 adapter + evaluation
-│   └── medgemma-stage2/         # Stage 2 adapter (post-training)
+│   └── medgemma-stage2-probabilistic/  # Stage 2 adapter (post-training)
 ├── configs/default.yaml         # Configuration
 └── requirements.txt
 ```
@@ -383,9 +404,21 @@ Reports are trained to communicate uncertainty using best practices for patients
 >
 > **Recommendation:** Discuss these findings with your doctor at your next visit, or schedule an eye exam within 1-2 months.
 
+#### Stage 2 Technical Notes
+
+- **Text-only training**: Stage 2 uses no images. The model is loaded with `AutoModelForCausalLM` (not `AutoModelForVision2Seq`) since the task is purely text-to-text (structured clinical context to patient report).
+- **Post-training conversion**: Training with `torch.compile()` prepends `_orig_mod.` to all parameter keys. Before uploading the adapter to Hugging Face Hub, run `scripts/convert_adapter.py` to strip this prefix and ensure compatibility with standard PEFT loading.
+
+```bash
+# Convert adapter after training
+python scripts/convert_adapter.py \
+    --input ./outputs/medgemma-stage2-probabilistic/adapter \
+    --output ./outputs/medgemma-stage2-converted/
+```
+
 ### Stage 3: End-to-End Evaluation
 
-Test the doubly fine-tuned model **without** providing retinal findings.
+Test the dual-adapter pipeline **without** providing retinal findings metadata.
 
 ```bash
 # Run evaluation
@@ -499,11 +532,18 @@ A Gradio-based web demo ([`app/demo.py`](app/demo.py)) provides:
 - Adjust sensitivity slider to see how results change
 - Interactive Q&A agent for diabetes lifestyle questions
 
+The demo uses the **dual-adapter pipeline** with real MedGemma inference -- the DR LoRA
+adapter runs on the retinal image to produce grade probabilities, then the Report LoRA
+adapter generates the patient-friendly report.
+
+**Deployed on HuggingFace Spaces** with ZeroGPU (free T4 GPU allocation on demand):
+
 ```bash
 # Run locally
 cd app && python demo.py
 
-# Or deploy to Hugging Face Spaces
+# Deployed at:
+# https://huggingface.co/spaces/drdavidl/dr-screening-assistant
 ```
 
 ## Competition
