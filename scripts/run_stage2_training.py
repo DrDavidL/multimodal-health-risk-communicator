@@ -397,10 +397,9 @@ def main():
         warmup_steps=20,
         max_grad_norm=1.0,
         logging_steps=1,
-        eval_strategy="steps",
-        eval_steps=10,
+        eval_strategy="no",  # Disable eval to avoid memory issues on MPS
         save_strategy="steps",
-        save_steps=20,  # Must be multiple of eval_steps for load_best_model_at_end
+        save_steps=10,
         save_total_limit=3,
         bf16=device_config["use_bf16"],
         fp16=device_config["use_fp16"],
@@ -408,9 +407,7 @@ def main():
         dataloader_pin_memory=False,
         remove_unused_columns=False,
         report_to="none",
-        load_best_model_at_end=True,
-        metric_for_best_model="eval_loss",
-        greater_is_better=False,
+        load_best_model_at_end=False,  # Use final checkpoint
     )
 
     # Trainer

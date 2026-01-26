@@ -3,7 +3,7 @@
 
 This script maintains DUA compliance by:
 1. Using Azure GPT-5.2 (BAA-compliant) to analyze the clinical data
-2. Not directly displaying or interpreting patient data in Claude
+2. Never displaying or interpreting patient data outside the BAA-compliant environment
 
 The condition_occurrence.csv contains diabetic retinopathy diagnoses:
 - mhoccur_pdr: Diabetic retinopathy (proliferative/non-proliferative)

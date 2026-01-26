@@ -9,7 +9,7 @@ Usage:
     python scripts/azure_query.py --file path/to/data.json "Analyze this data"
 
 Environment variables (set in .env):
-    AZURE_OPENAI_ENDPOINT - Azure OpenAI resource URL (e.g., https://lab-secure.openai.azure.com/)
+    AZURE_OPENAI_ENDPOINT - Azure OpenAI resource URL
     AZURE_OPENAI_API_KEY - API key
     AZURE_OPENAI_DEPLOYMENT - Model deployment name (e.g., "gpt-5.2")
 """

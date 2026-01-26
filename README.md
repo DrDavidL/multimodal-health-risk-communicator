@@ -104,46 +104,42 @@ This demonstrates that MedGemma **learned to see** diabetic retinopathy, not jus
 
 ```
 multimodal-health-risk-communicator/
+├── app/
+│   ├── demo.py                  # Gradio web demo application
+│   ├── requirements.txt         # App dependencies
+│   └── examples/                # Sample images for demo
 ├── src/
 │   ├── loaders/
-│   │   ├── __init__.py          # Exports all loaders
 │   │   ├── azure_storage.py     # Azure download with caching
 │   │   ├── dicom_loader.py      # Retinal DICOM with YBR→RGB conversion
 │   │   ├── cgm_loader.py        # CGM JSON (Open mHealth format)
 │   │   ├── clinical_loader.py   # Clinical CSV (OMOP CDM format)
 │   │   └── participant.py       # Unified multimodal loader
 │   ├── models/
-│   │   ├── __init__.py          # Exports MedGemmaInference, DRDetector
 │   │   ├── medgemma.py          # MedGemma 4B wrapper
-│   │   └── dr_detector.py       # High-sensitivity DR detection ⭐
+│   │   └── dr_detector.py       # High-sensitivity DR detection
 │   ├── training/
-│   │   ├── __init__.py          # Training exports
 │   │   ├── dataset.py           # Training dataset creation
 │   │   ├── trainer.py           # LoRA fine-tuning
-│   │   └── retinal_findings.py  # Retinal metadata extraction ⭐
-│   ├── pipeline/
-│   │   ├── __init__.py          # Exports ReportGenerator
-│   │   └── report_generator.py  # Patient report generation
-│   └── utils/
+│   │   └── retinal_findings.py  # Retinal metadata extraction
+│   └── pipeline/
+│       └── report_generator.py  # Patient report generation
 ├── scripts/
-│   ├── prepare_stage1_data.py   # Stage 1: Visual understanding data
-│   ├── prepare_stage2_data.py   # Stage 2: Report generation data
+│   ├── prepare_stage1_data.py   # Stage 1 data preparation
+│   ├── prepare_stage2_data.py   # Stage 2 data preparation
+│   ├── prepare_stage2_probabilistic.py  # Probabilistic report data
 │   ├── run_stage1_training.py   # Train visual understanding
 │   ├── run_stage2_training.py   # Train report generation
 │   ├── evaluate_stage3.py       # End-to-end evaluation
-│   └── demo_report.py           # Quick demo script
-├── data/                        # Local cache (gitignored)
-│   ├── clinical_data/           # Shared clinical CSVs
-│   │   └── condition_occurrence.csv  # Contains retinal findings! ⭐
-│   ├── training/
-│   │   ├── stage1_visual/       # Stage 1 manifests
-│   │   └── stage2_report/       # Stage 2 manifests
-│   └── participants/1001/       # Per-participant cached data
-├── outputs/
-│   ├── medgemma-stage1/         # Stage 1 adapter weights
-│   ├── medgemma-stage2/         # Stage 2 adapter weights
-│   └── evaluation/              # Stage 3 results
-├── CLAUDE.md                    # Context for Claude Code
+│   └── azure_query.py           # BAA-compliant Azure GPT-5.2 queries
+├── docs/
+│   ├── ARCHITECTURE.md          # System architecture
+│   ├── DATA.md                  # Dataset documentation
+│   └── EVALUATION_PLAN.md       # Evaluation methodology
+├── outputs/                     # Model weights and results
+│   ├── medgemma-stage1/         # Stage 1 adapter + evaluation
+│   └── medgemma-stage2/         # Stage 2 adapter (post-training)
+├── configs/default.yaml         # Configuration
 └── requirements.txt
 ```
 
@@ -177,10 +173,7 @@ az login
 
 Data is stored in Azure Blob Storage (not in repo — DUA protected).
 
-**Important:** All data is nested under a UUID prefix in Azure:
-```
-aXXX/dataset/
-```
+**Important:** All data is nested under a UUID prefix in Azure (provided with your DUA credentials).
 
 ### Data Processing Strategy
 
@@ -497,13 +490,21 @@ pipeline = HealthReportPipeline(dr_sensitivity="specific")
 pipeline = HealthReportPipeline(dr_threshold=0.08)
 ```
 
-### Demo Application (Planned)
+### Demo Application
 
-A hosted web demo will allow:
+A Gradio-based web demo ([`app/demo.py`](app/demo.py)) provides:
 - Upload retinal image (DICOM or JPEG)
 - Enter CGM metrics and basic demographics
 - Receive patient-friendly report with probabilistic DR assessment
 - Adjust sensitivity slider to see how results change
+- Interactive Q&A agent for diabetes lifestyle questions
+
+```bash
+# Run locally
+cd app && python demo.py
+
+# Or deploy to Hugging Face Spaces
+```
 
 ## Competition
 

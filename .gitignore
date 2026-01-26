@@ -19,6 +19,7 @@ azure.json
 *.pt
 *.pth
 models/
+outputs/*/checkpoint-*/
 
 # Python
 __pycache__/
@@ -60,6 +61,11 @@ Thumbs.db
 htmlcov/
 .tox/
 .nox/
+
+# Internal dev notes
+CLAUDE.md
+TODO.md
+.claude/
 
 # Logs
 *.log
