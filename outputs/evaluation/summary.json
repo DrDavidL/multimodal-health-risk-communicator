@@ -1,0 +1,108 @@
+{
+  "num_evaluated": 7,
+  "pipeline": "Dual-Adapter (DR LoRA \u2192 Report LoRA)",
+  "dr_detection": {
+    "sensitivity": 0.0,
+    "specificity": 1.0,
+    "threshold": 0.05,
+    "true_positives": 0,
+    "false_positives": 0,
+    "false_negatives": 1,
+    "true_negatives": 6
+  },
+  "report_quality": {
+    "average_findings_accuracy": 0.9047619047619048,
+    "note": "Keyword-based check for DR/AMD/RVO mentions vs ground truth"
+  },
+  "comparison": {
+    "medgemma": "Image input \u2192 P(DR) inferred \u2192 probabilistic report",
+    "gpt5": "Ground truth findings provided \u2192 report",
+    "gpt5_reports_generated": 7
+  },
+  "participants": [
+    {
+      "id": "P1032",
+      "ground_truth": {
+        "dr": true,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.0,
+      "grade": "",
+      "dr_detected": false,
+      "findings_accuracy": 0.6666666666666666
+    },
+    {
+      "id": "P1002",
+      "ground_truth": {
+        "dr": false,
+        "amd": true,
+        "rvo": false
+      },
+      "p_dr": 0.0,
+      "grade": "",
+      "dr_detected": false,
+      "findings_accuracy": 0.6666666666666666
+    },
+    {
+      "id": "P1036",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.0,
+      "grade": "",
+      "dr_detected": false,
+      "findings_accuracy": 1.0
+    },
+    {
+      "id": "P1048",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.0,
+      "grade": "",
+      "dr_detected": false,
+      "findings_accuracy": 1.0
+    },
+    {
+      "id": "P1007",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.0,
+      "grade": "",
+      "dr_detected": false,
+      "findings_accuracy": 1.0
+    },
+    {
+      "id": "P1045",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.0,
+      "grade": "",
+      "dr_detected": false,
+      "findings_accuracy": 1.0
+    },
+    {
+      "id": "P1054",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.0,
+      "grade": "",
+      "dr_detected": false,
+      "findings_accuracy": 1.0
+    }
+  ]
+}

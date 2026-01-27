@@ -1,0 +1,10 @@
+{
+  "stage": 2,
+  "task": "probabilistic_report_generation",
+  "base_model": "google/medgemma-4b-it",
+  "description": "Fine-tuned to generate patient-friendly reports with probabilistic DR communication",
+  "input_format": "P(DR) + Clinical context + CGM context",
+  "output_format": "Patient-friendly report with natural frequency explanations",
+  "num_train_examples": 43,
+  "num_val_examples": 5
+}
