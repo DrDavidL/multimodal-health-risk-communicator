@@ -28,11 +28,11 @@ from dataclasses import dataclass, field
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
-# Same prompt template used during Stage 2 training
+# Same prompt template used during Stage 2 training — enhanced with accuracy guardrails
 REPORT_PROMPT_TEMPLATE = """You are a health communication specialist helping patients understand their diabetic retinopathy screening results.
 
 SCREENING RESULTS:
-- Probability of diabetic retinopathy: {p_dr:.1%}
+- Probability of diabetic retinopathy: {p_dr:.1%} (about {n_out_of_10} out of 10)
 - Screening assessment: {certainty}
 - Predicted severity if present: {grade_description}
 - Urgency level: {urgency}
@@ -43,13 +43,25 @@ CLINICAL INFORMATION:
 GLUCOSE MONITORING:
 {cgm_context}
 
-Generate a patient-friendly report that:
-1. Explains the probability using natural frequencies (e.g., "X out of 10 people with similar results...")
-2. Clearly states this is a SCREENING result, not a definitive diagnosis
-3. Provides appropriate recommendations based on urgency
-4. Connects eye health to glucose control when relevant
-5. Uses simple language (8th grade reading level)
-6. Is warm and supportive, not alarming
+Generate a patient-friendly report following these rules:
+
+ACCURACY RULES (critical — do not violate):
+- Use the EXACT natural frequency provided above: "about {n_out_of_10} out of 10."
+  Examples of correct conversion: 80% = "about 8 out of 10"; 5% = "about 1 out of 20 or less than 1 out of 10"; 1% = "about 1 out of 100."
+  Do NOT round small probabilities UP (e.g., never say "2 out of 10" for a 5% probability).
+- CGM "time in range" refers to READINGS (not days). Say "readings" or "of the time," never "days."
+  Example: 95% in range = "about 95 out of 100 readings" or "95% of the time."
+- When comparing CGM GMI to lab HbA1c, check which is actually higher before stating the relationship.
+  Example: If GMI is 6.7% and lab HbA1c is 7.3%, say the CGM estimate is LOWER than the lab value, not higher.
+- Only state facts present in the clinical data. Do NOT invent symptoms, findings, or advice not supported by the data.
+  Example: If time below 70 is 0%, do not mention "low sugars" or suggest insulin adjustment.
+- This is a SCREENING result, not a definitive diagnosis. State this clearly.
+
+STYLE RULES:
+1. Use simple language (8th grade reading level)
+2. Be warm and supportive, not alarming
+3. Connect eye health to glucose control using the data provided
+4. Provide recommendations appropriate for the urgency level
 
 Include these sections:
 - Understanding Your Retinal Screening Results
@@ -94,19 +106,56 @@ class EvaluationResult:
     report_length: int = 0
 
 
-def load_test_manifest() -> list[dict]:
-    """Load pre-computed test data from the Stage 2 training manifest."""
-    manifest_path = Path("./data/training/stage2_probabilistic/test_manifest.json")
-    if not manifest_path.exists():
-        print(f"ERROR: Test manifest not found at {manifest_path}")
-        print("Run prepare_stage2_probabilistic.py first.")
+def load_test_manifest(use_set: str = "test") -> list[dict]:
+    """Load pre-computed test data from Stage 2 training manifests.
+
+    Args:
+        use_set: Which participant set(s) to use:
+            - "test": Original 7 test participants (default)
+            - "val+test": 5 val + 2 random from test (new held-out set)
+            - "val": 5 validation participants only
+    """
+    base_dir = Path("./data/training/stage2_probabilistic")
+
+    if use_set == "test":
+        manifest_path = base_dir / "test_manifest.json"
+        if not manifest_path.exists():
+            print(f"ERROR: Test manifest not found at {manifest_path}")
+            print("Run prepare_stage2_probabilistic.py first.")
+            sys.exit(1)
+        with open(manifest_path) as f:
+            manifest = json.load(f)
+        examples = manifest.get("examples", [])
+
+    elif use_set.startswith("val"):
+        val_path = base_dir / "val_manifest.json"
+        test_path = base_dir / "test_manifest.json"
+
+        if not val_path.exists():
+            print(f"ERROR: Val manifest not found at {val_path}")
+            sys.exit(1)
+
+        with open(val_path) as f:
+            val_manifest = json.load(f)
+        examples = val_manifest.get("examples", [])
+
+        if use_set == "val+test" and test_path.exists():
+            import random
+            with open(test_path) as f:
+                test_manifest = json.load(f)
+            test_examples = test_manifest.get("examples", [])
+            # Pick 2 random test participants to reach 7 total
+            random.seed(42)
+            extra = random.sample(test_examples, min(2, len(test_examples)))
+            examples.extend(extra)
+            print(f"  Combined: {len(val_manifest['examples'])} val + "
+                  f"{len(extra)} test = {len(examples)} total")
+
+    else:
+        print(f"ERROR: Unknown set '{use_set}'. Use 'test', 'val', or 'val+test'.")
         sys.exit(1)
 
-    with open(manifest_path) as f:
-        manifest = json.load(f)
-
-    examples = manifest.get("examples", [])
-    print(f"Loaded {len(examples)} test examples from manifest")
+    print(f"Loaded {len(examples)} evaluation examples ({use_set} set)")
     for ex in examples:
         print(f"  {ex['person_id']}: P(DR)={ex['p_dr']:.3f}, "
               f"grade={ex['dr_grade']}, urgency={ex['urgency']}, "
@@ -114,20 +163,31 @@ def load_test_manifest() -> list[dict]:
     return examples
 
 
-def run_report_generation(test_examples: list[dict]) -> dict[str, str]:
-    """Generate reports using our Stage 2 LoRA adapter (text-only)."""
+def run_report_generation(test_examples: list[dict],
+                          use_base_model: bool = False) -> dict[str, str]:
+    """Generate reports using MedGemma (with or without LoRA adapter).
+
+    Args:
+        test_examples: List of test participant data dicts.
+        use_base_model: If True, use base MedGemma without any LoRA adapter.
+    """
     import torch
     from transformers import AutoModelForCausalLM, AutoProcessor
-    from peft import PeftModel
 
-    print("\n" + "=" * 60)
-    print("REPORT GENERATION (Model 2 — Report LoRA)")
-    print("=" * 60)
+    if use_base_model:
+        print("\n" + "=" * 60)
+        print("REPORT GENERATION (Base MedGemma 4B — NO fine-tuning)")
+        print("=" * 60)
+    else:
+        from peft import PeftModel
+        print("\n" + "=" * 60)
+        print("REPORT GENERATION (Model 2 — Report LoRA)")
+        print("=" * 60)
 
-    adapter_path = Path("./outputs/medgemma-stage2-probabilistic/adapter")
-    if not adapter_path.exists():
-        print(f"  ERROR: Adapter not found at {adapter_path}")
-        return {}
+        adapter_path = Path("./outputs/medgemma-stage2-probabilistic/adapter")
+        if not adapter_path.exists():
+            print(f"  ERROR: Adapter not found at {adapter_path}")
+            return {}
 
     model_id = "google/medgemma-4b-it"
     dtype = torch.float32 if torch.backends.mps.is_available() else torch.bfloat16
@@ -145,8 +205,12 @@ def run_report_generation(test_examples: list[dict]) -> dict[str, str]:
         low_cpu_mem_usage=True,
     )
 
-    print(f"  Loading Stage 2 adapter from {adapter_path}...")
-    model = PeftModel.from_pretrained(base_model, str(adapter_path))
+    if use_base_model:
+        model = base_model
+        print("  Using base model (no adapter)")
+    else:
+        print(f"  Loading Stage 2 adapter from {adapter_path}...")
+        model = PeftModel.from_pretrained(base_model, str(adapter_path))
     model.eval()
 
     reports = {}
@@ -165,8 +229,12 @@ def run_report_generation(test_examples: list[dict]) -> dict[str, str]:
             else:
                 certainty = "Diabetic retinopathy is unlikely"
 
+            # Pre-compute natural frequency for accuracy
+            n_out_of_10 = round(p_dr * 10)
+
             prompt = REPORT_PROMPT_TEMPLATE.format(
                 p_dr=p_dr,
+                n_out_of_10=n_out_of_10,
                 certainty=certainty,
                 grade_description=GRADE_DESCRIPTIONS.get(ex["dr_grade"], "some changes"),
                 urgency=ex["urgency"].upper(),
@@ -373,9 +441,22 @@ def run_gpt5_judging(results: list[EvaluationResult],
 
 
 def main():
+    # Parse optional arguments
+    import argparse
+    parser = argparse.ArgumentParser(description="Model 2 Evaluation")
+    parser.add_argument("--set", default="test",
+                        choices=["test", "val", "val+test"],
+                        help="Which held-out set to evaluate "
+                             "(default: test; val+test = 5 val + 2 test = 7)")
+    parser.add_argument("--base-model", action="store_true",
+                        help="Use base MedGemma 4B without LoRA (for comparison)")
+    args = parser.parse_args()
+
+    model_label = "Base MedGemma 4B" if args.base_model else "Report LoRA"
     print("=" * 60)
-    print("MODEL 2 EVALUATION: Report Generation (Text-Only)")
-    print("MedGemma Report LoRA vs GPT-5.2 Baseline")
+    print(f"MODEL 2 EVALUATION: Report Generation (Text-Only)")
+    print(f"  Model: {model_label}")
+    print(f"  Comparison: vs GPT-5.2 Baseline  [set={args.set}]")
     print("=" * 60)
 
     # Load splits for leakage check
@@ -387,20 +468,19 @@ def main():
         val_set = set(splits["val"])
         test_set = set(splits["test"])
 
-        if test_set & train_set:
-            print("ERROR: Test/train overlap detected!")
+        held_out = val_set | test_set
+        if held_out & train_set:
+            print("ERROR: Held-out/train overlap detected!")
             return
-        if test_set & val_set:
-            print("ERROR: Test/val overlap detected!")
-            return
-        print(f"No leakage: {len(test_set)} test, {len(train_set)} train, "
-              f"{len(val_set)} val — all disjoint")
+        print(f"No leakage: {len(train_set)} train, {len(val_set)} val, "
+              f"{len(test_set)} test — all disjoint from training")
 
-    # Load pre-computed test data (text only — no images needed)
-    test_examples = load_test_manifest()
+    # Load pre-computed evaluation data (text only — no images needed)
+    test_examples = load_test_manifest(use_set=args.set)
 
-    # Generate reports using Model 2 (Report LoRA)
-    medgemma_reports = run_report_generation(test_examples)
+    # Generate reports
+    medgemma_reports = run_report_generation(test_examples,
+                                             use_base_model=args.base_model)
 
     # Compile results
     results = []
@@ -436,8 +516,13 @@ def main():
     # Phase 2: Automated judging via Azure GPT-5.2
     judgments = run_gpt5_judging(results, test_examples)
 
-    # Save and summarize
-    output_dir = Path("./outputs/evaluation")
+    # Save and summarize — use set/model-specific subdirectory
+    suffix = ""
+    if args.set != "test":
+        suffix += f"_{args.set.replace('+', '_')}"
+    if args.base_model:
+        suffix += "_base"
+    output_dir = Path(f"./outputs/evaluation{suffix}")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     if results:
@@ -480,8 +565,9 @@ def main():
 
         summary = {
             "num_evaluated": len(results),
-            "pipeline": "Model 2 (Report LoRA) — text-only evaluation",
-            "data_source": "Pre-computed from stage2_probabilistic/test_manifest.json",
+            "pipeline": f"{model_label} — text-only evaluation",
+            "evaluation_set": args.set,
+            "data_source": f"Pre-computed from stage2_probabilistic ({args.set} set)",
             "report_generation": {
                 "reports_generated": reports_generated,
                 "reports_failed": len(results) - reports_generated,
@@ -517,7 +603,7 @@ def main():
         print("EVALUATION SUMMARY")
         print("=" * 60)
         print(f"Participants evaluated: {len(results)}")
-        print(f"\nReport Generation (Model 2 — Report LoRA):")
+        print(f"\nReport Generation ({model_label}):")
         print(f"  Reports generated:       {reports_generated}/{len(results)}")
         print(f"  Avg findings accuracy:   {avg_accuracy:.0%}")
         print(f"  Avg section completeness: {avg_section_score:.0%}")

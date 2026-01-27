@@ -1,37 +1,54 @@
 {
   "num_evaluated": 7,
-  "pipeline": "Dual-Adapter (DR LoRA \u2192 Report LoRA)",
-  "dr_detection": {
-    "sensitivity": 0.0,
-    "specificity": 1.0,
-    "threshold": 0.05,
-    "true_positives": 0,
-    "false_positives": 0,
-    "false_negatives": 1,
-    "true_negatives": 6
-  },
-  "report_quality": {
-    "average_findings_accuracy": 0.9047619047619048,
+  "pipeline": "Model 2 (Report LoRA) \u2014 text-only evaluation",
+  "data_source": "Pre-computed from stage2_probabilistic/test_manifest.json",
+  "report_generation": {
+    "reports_generated": 7,
+    "reports_failed": 0,
+    "average_length_chars": 4973.142857142857,
+    "average_findings_accuracy": 0.6666666666666666,
+    "average_section_completeness": 1.0,
     "note": "Keyword-based check for DR/AMD/RVO mentions vs ground truth"
   },
-  "comparison": {
-    "medgemma": "Image input \u2192 P(DR) inferred \u2192 probabilistic report",
-    "gpt5": "Ground truth findings provided \u2192 report",
-    "gpt5_reports_generated": 7
+  "gpt5_judge": {
+    "clinical_accuracy": {
+      "mean": 3.0,
+      "min": 2,
+      "max": 4
+    },
+    "probability_communication": {
+      "mean": 4.285714285714286,
+      "min": 3,
+      "max": 5
+    },
+    "actionability": {
+      "mean": 3.7142857142857144,
+      "min": 3,
+      "max": 4
+    },
+    "readability": {
+      "mean": 4.142857142857143,
+      "min": 4,
+      "max": 5
+    },
+    "completeness": {
+      "mean": 5.0,
+      "min": 5,
+      "max": 5
+    },
+    "overall_quality": {
+      "mean": 3.4285714285714284,
+      "min": 3,
+      "max": 4
+    },
+    "overall_mean": 3.9285714285714284,
+    "num_judged": 7
+  },
+  "baseline": {
+    "source": "GPT-5.2 reports from training manifest",
+    "num_reports": 7
   },
   "participants": [
-    {
-      "id": "P1032",
-      "ground_truth": {
-        "dr": true,
-        "amd": false,
-        "rvo": false
-      },
-      "p_dr": 0.0,
-      "grade": "",
-      "dr_detected": false,
-      "findings_accuracy": 0.6666666666666666
-    },
     {
       "id": "P1002",
       "ground_truth": {
@@ -39,34 +56,21 @@
         "amd": true,
         "rvo": false
       },
-      "p_dr": 0.0,
-      "grade": "",
-      "dr_detected": false,
-      "findings_accuracy": 0.6666666666666666
-    },
-    {
-      "id": "P1036",
-      "ground_truth": {
-        "dr": false,
-        "amd": false,
-        "rvo": false
-      },
-      "p_dr": 0.0,
-      "grade": "",
-      "dr_detected": false,
-      "findings_accuracy": 1.0
-    },
-    {
-      "id": "P1048",
-      "ground_truth": {
-        "dr": false,
-        "amd": false,
-        "rvo": false
-      },
-      "p_dr": 0.0,
-      "grade": "",
-      "dr_detected": false,
-      "findings_accuracy": 1.0
+      "p_dr": 0.11566902175684511,
+      "grade": "A",
+      "urgency": "routine",
+      "findings_accuracy": 0.3333333333333333,
+      "report_length": 4944,
+      "gpt5_judgment": {
+        "clinical_accuracy": 3,
+        "probability_communication": 5,
+        "actionability": 3,
+        "readability": 4,
+        "completeness": 5,
+        "overall_quality": 3,
+        "strengths": "Clear screening-vs-diagnosis framing; good natural-frequency explanation; organized into all required sections; generally warm and simple language.",
+        "weaknesses": "Misses the AMD ground-truth finding (unlike Report B); includes questionable/unsupported advice (e.g., yearly dilated exam based on age 50+, \u201cnormal vision on today\u2019s screening\u201d with only OD value, and some awkward/incorrect interpretations of CGM percentages)."
+      }
     },
     {
       "id": "P1007",
@@ -75,10 +79,67 @@
         "amd": false,
         "rvo": false
       },
-      "p_dr": 0.0,
-      "grade": "",
-      "dr_detected": false,
-      "findings_accuracy": 1.0
+      "p_dr": 0.04628199672855865,
+      "grade": "A",
+      "urgency": "routine",
+      "findings_accuracy": 0.6666666666666666,
+      "report_length": 5539,
+      "gpt5_judgment": {
+        "clinical_accuracy": 3,
+        "probability_communication": 4,
+        "actionability": 3,
+        "readability": 4,
+        "completeness": 5,
+        "overall_quality": 3,
+        "strengths": "Includes all required sections; clearly frames as a screening (not diagnosis); uses natural-frequency phrasing; generally warm and understandable.",
+        "weaknesses": "Some clinically questionable statements (e.g., implying retina vessels look normal from screening; linking lows to eye stress); misstates time-below-range as ~1/10 (it is ~2/10) and oversimplifies 4.6% as '0 out of 10'; suggests insulin adjustment despite participant labeled healthy/no meds provided."
+      }
+    },
+    {
+      "id": "P1032",
+      "ground_truth": {
+        "dr": true,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.8113586336165317,
+      "grade": "D",
+      "urgency": "urgent",
+      "findings_accuracy": 1.0,
+      "report_length": 4901,
+      "gpt5_judgment": {
+        "clinical_accuracy": 4,
+        "probability_communication": 5,
+        "actionability": 4,
+        "readability": 4,
+        "completeness": 5,
+        "overall_quality": 4,
+        "strengths": "Clear natural-frequency risk explanation, repeatedly clarifies screening vs diagnosis, includes all required sections, ties glucose patterns to eye risk, provides urgent follow-up guidance.",
+        "weaknesses": "A few statements are slightly off/unclear (e.g., time-in-range described as \u201cdays\u201d/\u201c4 out of 10 days\u201d vs readings; \u201cmore advanced changes\u201d may overstate model output), and some phrasing adds mild jargon/extra details (BP/creatinine comments) without clear patient framing."
+      }
+    },
+    {
+      "id": "P1036",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.08721431765657987,
+      "grade": "A",
+      "urgency": "routine",
+      "findings_accuracy": 0.6666666666666666,
+      "report_length": 4864,
+      "gpt5_judgment": {
+        "clinical_accuracy": 3,
+        "probability_communication": 5,
+        "actionability": 4,
+        "readability": 4,
+        "completeness": 5,
+        "overall_quality": 4,
+        "strengths": "Clear screening-vs-diagnosis framing; good natural-frequency explanation; appropriate routine follow-up guidance; includes all required sections and is generally patient-friendly.",
+        "weaknesses": "Misstates A1c relationship (CGM GMI 6.7 is lower than lab HbA1c 7.3, not higher); minor numerical phrasing error ('1 out of 20 above 180' contradicts 12.4%); introduces extra symptoms (eye pressure, double vision) that are not clearly tied to DR screening context."
+      }
     },
     {
       "id": "P1045",
@@ -87,10 +148,44 @@
         "amd": false,
         "rvo": false
       },
-      "p_dr": 0.0,
-      "grade": "",
-      "dr_detected": false,
-      "findings_accuracy": 1.0
+      "p_dr": 0.057793317678577254,
+      "grade": "A",
+      "urgency": "routine",
+      "findings_accuracy": 0.6666666666666666,
+      "report_length": 5373,
+      "gpt5_judgment": {
+        "clinical_accuracy": 2,
+        "probability_communication": 3,
+        "actionability": 4,
+        "readability": 4,
+        "completeness": 5,
+        "overall_quality": 3,
+        "strengths": "Warm tone, clear routine-urgency guidance, good linkage to glucose control and other risk factors, includes all required sections.",
+        "weaknesses": "Major error converting 5.8% probability to natural frequency (\u201c2 out of 10\u201d instead of ~1 out of 20 / ~0\u20131 out of 10); adds speculative claims (screening affected by temporary glucose spikes/dips; mentions \u2018low sugars often\u2019 despite 0% <70) which aren\u2019t supported by the data."
+      }
+    },
+    {
+      "id": "P1048",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.011980320175174206,
+      "grade": "A",
+      "urgency": "routine",
+      "findings_accuracy": 0.6666666666666666,
+      "report_length": 4810,
+      "gpt5_judgment": {
+        "clinical_accuracy": 2,
+        "probability_communication": 4,
+        "actionability": 4,
+        "readability": 4,
+        "completeness": 5,
+        "overall_quality": 3,
+        "strengths": "Warm tone, clear that this is a screening with routine urgency; good linkage to BP/triglycerides; includes all required sections and reasonable next steps.",
+        "weaknesses": "Misstates CGM time-in-range (says ~2/3 in range and uses '95 out of 100 days' instead of readings/days); natural frequency for 1.2% is rounded to 1/10 (too high vs ~1/100), which may mislead."
+      }
     },
     {
       "id": "P1054",
@@ -99,10 +194,21 @@
         "amd": false,
         "rvo": false
       },
-      "p_dr": 0.0,
-      "grade": "",
-      "dr_detected": false,
-      "findings_accuracy": 1.0
+      "p_dr": 0.014150308793678847,
+      "grade": "A",
+      "urgency": "routine",
+      "findings_accuracy": 0.6666666666666666,
+      "report_length": 4381,
+      "gpt5_judgment": {
+        "clinical_accuracy": 4,
+        "probability_communication": 4,
+        "actionability": 4,
+        "readability": 5,
+        "completeness": 5,
+        "overall_quality": 4,
+        "strengths": "Warm, clear, patient-friendly; includes all required sections; appropriately emphasizes screening vs diagnosis and routine urgency; accurately links stable CGM/A1c to eye health.",
+        "weaknesses": "Natural-frequency framing is a bit too rounded down for a 1.4% risk (\"0 out of 10\" may understate); a few recommendations could be slightly more specific (timing, follow-up intervals) and avoid mildly speculative phrasing about long-term vessel stress."
+      }
     }
   ]
 }

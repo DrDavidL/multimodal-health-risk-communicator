@@ -1,0 +1,215 @@
+{
+  "num_evaluated": 7,
+  "pipeline": "Model 2 (Report LoRA) \u2014 text-only evaluation",
+  "evaluation_set": "val+test",
+  "data_source": "Pre-computed from stage2_probabilistic (val+test set)",
+  "report_generation": {
+    "reports_generated": 7,
+    "reports_failed": 0,
+    "average_length_chars": 5340.142857142857,
+    "average_findings_accuracy": 0.6666666666666666,
+    "average_section_completeness": 1.0,
+    "note": "Keyword-based check for DR/AMD/RVO mentions vs ground truth"
+  },
+  "gpt5_judge": {
+    "clinical_accuracy": {
+      "mean": 2.4285714285714284,
+      "min": 2,
+      "max": 4
+    },
+    "probability_communication": {
+      "mean": 3.2857142857142856,
+      "min": 2,
+      "max": 4
+    },
+    "actionability": {
+      "mean": 3.2857142857142856,
+      "min": 3,
+      "max": 4
+    },
+    "readability": {
+      "mean": 3.857142857142857,
+      "min": 3,
+      "max": 4
+    },
+    "completeness": {
+      "mean": 5.0,
+      "min": 5,
+      "max": 5
+    },
+    "overall_quality": {
+      "mean": 3.142857142857143,
+      "min": 2,
+      "max": 4
+    },
+    "overall_mean": 3.5,
+    "num_judged": 7
+  },
+  "baseline": {
+    "source": "GPT-5.2 reports from training manifest",
+    "num_reports": 7
+  },
+  "participants": [
+    {
+      "id": "P1003",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.3416676229431619,
+      "grade": "A",
+      "urgency": "moderate",
+      "findings_accuracy": 0.6666666666666666,
+      "report_length": 5319,
+      "gpt5_judgment": {
+        "clinical_accuracy": 2,
+        "probability_communication": 3,
+        "actionability": 3,
+        "readability": 4,
+        "completeness": 5,
+        "overall_quality": 3,
+        "strengths": "Includes all required sections; warm, mostly simple language; correctly states screening (not diagnosis) and uses the required \u201cabout 3 out of 10.\u201d",
+        "weaknesses": "CGM time-in-range misphrased as \u201c98 days\u2019 worth\u201d (should be readings/time); adds unsupported claims about \u201cpeople with similar results may have retinopathy not visible right now\u201d; gives symptom/warning-sign advice not supported by provided data; some recommendations are generic/misaligned (e.g., \u2018as recommended for people with diabetes\u2019 despite \u2018Healthy\u2019 status)."
+      }
+    },
+    {
+      "id": "P1004",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.03431525222172678,
+      "grade": "A",
+      "urgency": "routine",
+      "findings_accuracy": 0.6666666666666666,
+      "report_length": 5343,
+      "gpt5_judgment": {
+        "clinical_accuracy": 2,
+        "probability_communication": 3,
+        "actionability": 3,
+        "readability": 4,
+        "completeness": 5,
+        "overall_quality": 3,
+        "strengths": "Warm tone, simple structure, includes all required sections, uses provided CGM percentages and mentions screening vs diagnosis.",
+        "weaknesses": "Several accuracy issues: converts 6.9% <70 to ~2/100 (should be ~7/100), says GMI 5.8 is lower than HbA1c 5.6 (it\u2019s higher), adds an extra natural frequency (\u201cabout 0 out of 100\u201d) not provided, and implies diabetes/yearly exams despite status listed as healthy."
+      }
+    },
+    {
+      "id": "P1015",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.0138076772685292,
+      "grade": "A",
+      "urgency": "routine",
+      "findings_accuracy": 0.6666666666666666,
+      "report_length": 5171,
+      "gpt5_judgment": {
+        "clinical_accuracy": 4,
+        "probability_communication": 4,
+        "actionability": 3,
+        "readability": 4,
+        "completeness": 5,
+        "overall_quality": 4,
+        "strengths": "Accurately reflects key clinical/CGM values, uses the required natural frequency (\u201cabout 0 out of 10\u201d), clearly frames as screening with routine urgency, and includes all required sections in patient-friendly language.",
+        "weaknesses": "Some recommendations are over-prescriptive/not strictly supported by the data (e.g., \u201ckeep HbA1c around 7.0,\u201d \u201creduce highs\u2026 even small spikes can add up\u201d) and a bit repetitive (two yearly eye-exam bullets); could better match routine follow-up guidance without implying specific targets or need for change."
+      }
+    },
+    {
+      "id": "P1016",
+      "ground_truth": {
+        "dr": true,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.5842500682941756,
+      "grade": "B",
+      "urgency": "moderate",
+      "findings_accuracy": 1.0,
+      "report_length": 5359,
+      "gpt5_judgment": {
+        "clinical_accuracy": 3,
+        "probability_communication": 4,
+        "actionability": 3,
+        "readability": 4,
+        "completeness": 5,
+        "overall_quality": 4,
+        "strengths": "Correctly reports key clinical values, clearly states this is screening not diagnosis, uses natural-frequency phrasing for the DR probability, includes all required sections with warm, simple language and links eye risk to high glucose/BP.",
+        "weaknesses": "Adds unsupported specifics (e.g., 'within 6 months' timeline; 'predicted severity' as mild) and contains a misleading line implying '6 out of 10 people would be found with DR if screened like this' (overgeneralized); minor inconsistency/rounding in time-in-range phrasing."
+      }
+    },
+    {
+      "id": "P1052",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.06681996316868859,
+      "grade": "A",
+      "urgency": "routine",
+      "findings_accuracy": 0.6666666666666666,
+      "report_length": 4945,
+      "gpt5_judgment": {
+        "clinical_accuracy": 2,
+        "probability_communication": 2,
+        "actionability": 4,
+        "readability": 3,
+        "completeness": 5,
+        "overall_quality": 2,
+        "strengths": "Includes all required sections; generally warm tone; recommends routine follow-up and notes screening is not definitive; uses CGM time-in-range correctly as readings in one place.",
+        "weaknesses": "Multiple major accuracy errors: misstates CGM low/high readings as ~0/100 (should be ~0.4/100 low and ~0.1/100 high), incorrectly converts HbA1c and GMI to 'out of 10' and wrongly states GMI is lower than lab (it is higher), and omits the required natural frequency 'about 1 out of 10' for retinopathy probability."
+      }
+    },
+    {
+      "id": "P1048",
+      "ground_truth": {
+        "dr": false,
+        "amd": false,
+        "rvo": false
+      },
+      "p_dr": 0.011980320175174206,
+      "grade": "A",
+      "urgency": "routine",
+      "findings_accuracy": 0.6666666666666666,
+      "report_length": 5676,
+      "gpt5_judgment": {
+        "clinical_accuracy": 2,
+        "probability_communication": 4,
+        "actionability": 4,
+        "readability": 4,
+        "completeness": 5,
+        "overall_quality": 3,
+        "strengths": "Includes all required sections; generally patient-friendly; correct use of time-in-range as readings; appropriate routine follow-up and BP follow-up guidance; clearly notes screening nature.",
+        "weaknesses": "Major factual error comparing GMI vs lab HbA1c (states GMI 6.5 is lower than HbA1c 5.3); some overreach/unclear statements (e.g., '10 out of 10 would not'); misses notable lipid issue (very high triglycerides) and left-eye poor vision as potential prompt for eye follow-up discussion."
+      }
+    },
+    {
+      "id": "P1002",
+      "ground_truth": {
+        "dr": false,
+        "amd": true,
+        "rvo": false
+      },
+      "p_dr": 0.11566902175684511,
+      "grade": "A",
+      "urgency": "routine",
+      "findings_accuracy": 0.3333333333333333,
+      "report_length": 5568,
+      "gpt5_judgment": {
+        "clinical_accuracy": 2,
+        "probability_communication": 3,
+        "actionability": 3,
+        "readability": 4,
+        "completeness": 5,
+        "overall_quality": 3,
+        "strengths": "Warm, generally clear 8th-grade language; correct CGM time-in-range phrasing (\u201creadings\u201d); includes all required sections and mostly uses the provided values.",
+        "weaknesses": "Major inaccuracies: misstates the 11.6% DR probability (\u201cdiabetic retinopathy is about 1 out of 10 people with diabetes\u201d) and contradicts data by saying ~1/100 readings above 180 (should be 0/100). Adds unsupported claims (e.g., \u201cCGM estimate is often a good estimate\u2026\u201d) and misses noting AMD ground-truth finding (though not in the provided screening output)."
+      }
+    }
+  ]
+}
