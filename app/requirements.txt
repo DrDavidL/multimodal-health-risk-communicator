@@ -1,6 +1,7 @@
 # Demo application dependencies
-# Use gradio 5.x for Python 3.13 compatibility
-gradio>=5.0.0
+# Pin to stable gradio 5.x version with working gradio_client
+gradio==5.9.1
+gradio_client==1.5.2
 huggingface_hub>=0.26.0
 Pillow>=9.0.0
 torch>=2.0.0
