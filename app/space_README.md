@@ -3,9 +3,7 @@ title: DR Screening Assistant
 emoji: 👁️
 colorFrom: blue
 colorTo: green
-sdk: gradio
-sdk_version: 5.9.1
-app_file: demo.py
+sdk: docker
 pinned: false
 license: other
 license_name: health-ai-developer-foundations
