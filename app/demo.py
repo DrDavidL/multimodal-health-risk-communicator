@@ -16,7 +16,6 @@ swapped at inference time for efficient single-GPU deployment.
 import sys
 from pathlib import Path
 from enum import Enum
-from typing import Optional
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -399,7 +398,7 @@ def run_qa_inference(question: str, patient_context: str) -> str:
 # Helper functions
 # ---------------------------------------------------------------------------
 
-def get_urgency_display(p_dr: float) -> tuple[str, str, str]:
+def get_urgency_display(p_dr):
     """Get urgency level, color, and recommendation."""
     if p_dr >= 0.7:
         return "URGENT", "red", "See an eye specialist within 2 weeks"
@@ -409,7 +408,7 @@ def get_urgency_display(p_dr: float) -> tuple[str, str, str]:
         return "ROUTINE", "green", "Continue regular annual eye exams"
 
 
-def build_clinical_context(diabetes_type, hba1c, years_diabetes) -> str:
+def build_clinical_context(diabetes_type, hba1c, years_diabetes):
     """Format clinical info for model prompt."""
     lines = []
     if diabetes_type and diabetes_type != "Unknown":
@@ -422,7 +421,7 @@ def build_clinical_context(diabetes_type, hba1c, years_diabetes) -> str:
     return "\n".join(lines) if lines else "No clinical data provided"
 
 
-def build_cgm_context(cgm_avg, cgm_tir) -> str:
+def build_cgm_context(cgm_avg, cgm_tir):
     """Format CGM info for model prompt."""
     lines = []
     if cgm_avg:
@@ -436,7 +435,7 @@ def build_cgm_context(cgm_avg, cgm_tir) -> str:
 
 
 def generate_template_report(p_dr, has_dr, grade, urgency, urgency_action,
-                             clinical_context, cgm_context) -> str:
+                             clinical_context, cgm_context):
     """Template-based report fallback when Stage 2 model isn't available."""
     n_positive = round(p_dr * 10)
     n_negative = 10 - n_positive
@@ -495,14 +494,14 @@ If we screened 10 people with similar results:
 # ---------------------------------------------------------------------------
 
 def analyze_retina(
-    image: Image.Image | None,
-    diabetes_type: str,
-    hba1c: float | None,
-    years_diabetes: int | None,
-    cgm_avg_glucose: float | None,
-    cgm_time_in_range: float | None,
-    sensitivity_preset: str,
-) -> tuple[str, str, str]:
+    image,
+    diabetes_type,
+    hba1c,
+    years_diabetes,
+    cgm_avg_glucose,
+    cgm_time_in_range,
+    sensitivity_preset,
+):
     """
     Analyze retinal image and generate patient report.
 
@@ -617,10 +616,10 @@ def analyze_retina(
 # ---------------------------------------------------------------------------
 
 def answer_lifestyle_question(
-    question: str,
-    patient_context: str,
-    chat_history: list | None,
-) -> tuple[list, str]:
+    question,
+    patient_context,
+    chat_history,
+):
     """Answer patient questions using MedGemma grounded on authoritative guidance."""
     if chat_history is None:
         chat_history = []
@@ -647,7 +646,7 @@ def answer_lifestyle_question(
     return chat_history, ""
 
 
-def _fallback_qa(question: str) -> str:
+def _fallback_qa(question):
     """Keyword-based fallback when model isn't available."""
     q = question.lower()
 
