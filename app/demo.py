@@ -63,8 +63,7 @@ SENSITIVITY_THRESHOLDS = {
 DR_ADAPTER_ID = "qizunlee/medgemma-4b-it-sft-lora-diabetic-retinopathy"
 
 # Our report generation adapter (Stage 2 — text)
-# TODO: Update with actual HF Hub path after upload
-REPORT_ADAPTER_ID = "drdavidl/medgemma-stage2-report"
+REPORT_ADAPTER_ID = "dliebovi/medgemma-stage2-report"
 
 # Base model
 BASE_MODEL_ID = "google/medgemma-4b-it"
