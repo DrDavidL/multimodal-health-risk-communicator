@@ -2,6 +2,7 @@
 # Use latest Gradio 5.x
 gradio>=5.0.0
 huggingface_hub>=0.26.0
+pytz
 Pillow>=9.0.0
 torch>=2.0.0
 transformers>=4.40.0
