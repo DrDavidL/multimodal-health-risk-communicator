@@ -1,0 +1,114 @@
+{
+  "description": "Synthetic clinical data for demo purposes. NOT real patient data.",
+  "disclaimer": "These are fictional examples created for demonstration. Any resemblance to real patients is coincidental.",
+  "examples": [
+    {
+      "id": "demo_normal",
+      "name": "Healthy Adult",
+      "image": "fundus_normal.jpg",
+      "expected_result": "Low risk - routine follow-up",
+      "clinical": {
+        "age": 52,
+        "diabetes_status": "Pre-diabetes (lifestyle controlled)",
+        "hba1c": 5.9,
+        "hba1c_category": "pre-diabetic range",
+        "fasting_glucose": 102,
+        "bmi": 27.3,
+        "bmi_category": "overweight",
+        "systolic_bp": 128,
+        "diastolic_bp": 78,
+        "total_cholesterol": 195,
+        "ldl": 118,
+        "hdl": 52,
+        "triglycerides": 145,
+        "creatinine": 0.92
+      },
+      "cgm": {
+        "recording_days": 7,
+        "readings": 2016,
+        "mean_glucose": 118,
+        "glucose_min": 72,
+        "glucose_max": 185,
+        "cv": 18.2,
+        "gmi": 6.0,
+        "time_in_range_70_180": 94.5,
+        "time_below_70": 0.8,
+        "time_above_180": 4.7,
+        "time_very_low_54": 0.0,
+        "time_very_high_250": 0.0
+      }
+    },
+    {
+      "id": "demo_mild_dr",
+      "name": "Diabetic with Mild Changes",
+      "image": "fundus_dr_mild.jpg",
+      "expected_result": "Moderate risk - schedule eye exam within 1-2 months",
+      "clinical": {
+        "age": 61,
+        "diabetes_status": "Type 2 (oral medication controlled)",
+        "hba1c": 7.8,
+        "hba1c_category": "diabetic range",
+        "fasting_glucose": 142,
+        "bmi": 32.1,
+        "bmi_category": "obese",
+        "systolic_bp": 138,
+        "diastolic_bp": 85,
+        "total_cholesterol": 212,
+        "ldl": 128,
+        "hdl": 41,
+        "triglycerides": 198,
+        "creatinine": 1.15
+      },
+      "cgm": {
+        "recording_days": 10,
+        "readings": 2880,
+        "mean_glucose": 162,
+        "glucose_min": 68,
+        "glucose_max": 278,
+        "cv": 28.5,
+        "gmi": 7.2,
+        "time_in_range_70_180": 68.2,
+        "time_below_70": 2.1,
+        "time_above_180": 29.7,
+        "time_very_low_54": 0.4,
+        "time_very_high_250": 5.8
+      }
+    },
+    {
+      "id": "demo_severe_dr",
+      "name": "Diabetic with Advanced Changes",
+      "image": "fundus_dr_severe.jpg",
+      "expected_result": "High risk - URGENT eye specialist referral within 1-2 weeks",
+      "clinical": {
+        "age": 68,
+        "diabetes_status": "Type 2 (insulin dependent)",
+        "hba1c": 9.2,
+        "hba1c_category": "diabetic range (poor control)",
+        "fasting_glucose": 198,
+        "bmi": 35.8,
+        "bmi_category": "obese",
+        "systolic_bp": 152,
+        "diastolic_bp": 92,
+        "total_cholesterol": 245,
+        "ldl": 152,
+        "hdl": 38,
+        "triglycerides": 312,
+        "creatinine": 1.68
+      },
+      "cgm": {
+        "recording_days": 10,
+        "readings": 2880,
+        "mean_glucose": 205,
+        "glucose_min": 52,
+        "glucose_max": 358,
+        "cv": 35.2,
+        "gmi": 8.5,
+        "time_in_range_70_180": 42.1,
+        "time_below_70": 3.8,
+        "time_above_180": 54.1,
+        "time_very_low_54": 1.2,
+        "time_very_high_250": 18.5
+      }
+    }
+  ]
+}

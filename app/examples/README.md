@@ -1,52 +1,49 @@
-# Sample Retinal Images for Demo
+# Demo Examples
 
-This directory should contain sample retinal fundus images for the demo application.
+Sample retinal fundus images and synthetic clinical data for testing the DR Screening Assistant.
 
-## Obtaining Sample Images
+## Important Disclaimer
 
-### Option 1: APTOS 2019 Dataset (Recommended)
-The APTOS 2019 Blindness Detection dataset contains publicly available retinal images with DR grades.
+**Images:** These retinal images are from the [National Eye Institute (NEI)](https://www.nei.nih.gov/), part of the U.S. National Institutes of Health, and are in the public domain.
 
-1. Visit: https://www.kaggle.com/competitions/aptos2019-blindness-detection/data
-2. Accept the competition rules
-3. Download a few sample images from the training set
-4. Rename them according to our convention below
+**Clinical Data:** All clinical values in `synthetic_examples.json` are **synthetic (fictional)** and were created for demonstration purposes only. They do NOT represent real patient data.
 
-### Option 2: Academic Torrents
-Alternative download without Kaggle account:
-- https://academictorrents.com/details/d8653db45e7f111dc2c1b595bdac7ccf695efcfd
+**Do NOT use AI-READI data** in this public demo — that data is protected under a Data Use Agreement.
 
-## Required Files
+## Files
 
-Please add the following sample images:
+| File | Description | Source |
+|------|-------------|--------|
+| `fundus_normal.jpg` | Normal retina | NEI public domain |
+| `fundus_dr_mild.jpg` | Mild diabetic retinopathy | NEI public domain |
+| `fundus_dr_severe.jpg` | Proliferative diabetic retinopathy | NEI public domain |
+| `synthetic_examples.json` | Fictional clinical + CGM data | Created for demo |
 
-| Filename | DR Grade | Purpose |
-|----------|----------|---------|
-| `sample_healthy.jpg` | Grade 0 (No DR) | Show normal/healthy result |
-| `sample_mild.jpg` | Grade 1-2 (Mild/Moderate) | Show moderate finding |
-| `sample_severe.jpg` | Grade 3-4 (Severe/PDR) | Show urgent finding |
+## Example Scenarios
 
-## DR Grade Reference
+### 1. Healthy Adult (Low Risk)
+- **Image:** `fundus_normal.jpg`
+- **HbA1c:** 5.9% (pre-diabetic)
+- **CGM Time in Range:** 94.5%
+- **Expected:** Routine follow-up
 
-The APTOS dataset uses this grading scale:
-- **0**: No diabetic retinopathy
-- **1**: Mild nonproliferative DR
-- **2**: Moderate nonproliferative DR
-- **3**: Severe nonproliferative DR
-- **4**: Proliferative DR
+### 2. Diabetic with Mild Changes (Moderate Risk)
+- **Image:** `fundus_dr_mild.jpg`
+- **HbA1c:** 7.8% (diabetic range)
+- **CGM Time in Range:** 68.2%
+- **Expected:** Eye exam within 1-2 months
 
-## Image Selection Tips
+### 3. Diabetic with Advanced Changes (High Risk)
+- **Image:** `fundus_dr_severe.jpg`
+- **HbA1c:** 9.2% (poor control)
+- **CGM Time in Range:** 42.1%
+- **Expected:** URGENT referral within 1-2 weeks
 
-When selecting sample images:
-1. Choose clear, well-lit fundus photographs
-2. Select one from each severity category
-3. Avoid images with artifacts or poor quality
-4. Ensure images are appropriate for public demonstration
+## Usage in Demo
+
+These examples can be loaded automatically in the Gradio demo to test the full pipeline without needing real patient data.
 
 ## License
 
-APTOS 2019 dataset images are released under the competition rules for research and educational purposes.
-
-## Note
-
-**Do NOT use AI-READI data** in this public demo - that data is protected under a Data Use Agreement.
+- **Images:** Public domain (U.S. government work)
+- **Synthetic data:** MIT License (part of this repository)
