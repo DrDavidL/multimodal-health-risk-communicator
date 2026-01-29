@@ -630,8 +630,7 @@ def answer_lifestyle_question(
     if not patient_context:
         response = ("Please analyze a retinal image first (on the Retinal Analysis tab) "
                      "so I can personalize my answers to your situation.")
-        chat_history.append({"role": "user", "content": question})
-        chat_history.append({"role": "assistant", "content": response})
+        chat_history.append((question, response))
         return chat_history, ""
 
     # Try real MedGemma inference
@@ -641,8 +640,7 @@ def answer_lifestyle_question(
         print(f"Q&A inference failed ({e}), using fallback.")
         response = _fallback_qa(question)
 
-    chat_history.append({"role": "user", "content": question})
-    chat_history.append({"role": "assistant", "content": response})
+    chat_history.append((question, response))
     return chat_history, ""
 
 
@@ -814,7 +812,6 @@ from the **American Diabetes Association**, **National Eye Institute**, and
                 chatbot = gr.Chatbot(
                     label="Conversation",
                     height=400,
-                    type="messages",  # Gradio 5.x format
                 )
 
                 with gr.Row():

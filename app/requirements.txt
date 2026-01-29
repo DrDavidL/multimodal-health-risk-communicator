@@ -1,7 +1,6 @@
 # Demo application dependencies
-# Pin to stable gradio 5.x version with working gradio_client
-gradio==5.9.1
-gradio_client==1.5.2
+# Pin to gradio 4.44.1 (last stable 4.x) to avoid JSON schema bugs in 5.x
+gradio==4.44.1
 huggingface_hub>=0.26.0
 Pillow>=9.0.0
 torch>=2.0.0
