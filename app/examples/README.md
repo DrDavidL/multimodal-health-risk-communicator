@@ -4,7 +4,7 @@ Sample retinal fundus images and synthetic clinical data for testing the DR Scre
 
 ## Important Disclaimer
 
-**Images:** These retinal images are from the [National Eye Institute (NEI)](https://www.nei.nih.gov/), part of the U.S. National Institutes of Health, and are in the public domain.
+**Images:** These are **synthetic placeholder images** created programmatically for demonstration purposes. They are NOT real medical images and should NOT be used for any clinical assessment. They are designed to visually resemble fundus photographs but are entirely artificial.
 
 **Clinical Data:** All clinical values in `synthetic_examples.json` are **synthetic (fictional)** and were created for demonstration purposes only. They do NOT represent real patient data.
 
@@ -14,9 +14,9 @@ Sample retinal fundus images and synthetic clinical data for testing the DR Scre
 
 | File | Description | Source |
 |------|-------------|--------|
-| `fundus_normal.jpg` | Normal retina | NEI public domain |
-| `fundus_dr_mild.jpg` | Mild diabetic retinopathy | NEI public domain |
-| `fundus_dr_severe.jpg` | Proliferative diabetic retinopathy | NEI public domain |
+| `fundus_normal.jpg` | Normal retina (synthetic) | Programmatically generated |
+| `fundus_dr_mild.jpg` | Mild DR appearance (synthetic) | Programmatically generated |
+| `fundus_dr_severe.jpg` | Severe DR appearance (synthetic) | Programmatically generated |
 | `synthetic_examples.json` | Fictional clinical + CGM data | Created for demo |
 
 ## Example Scenarios
@@ -45,5 +45,5 @@ These examples can be loaded automatically in the Gradio demo to test the full p
 
 ## License
 
-- **Images:** Public domain (U.S. government work)
+- **Images:** MIT License (synthetic, created for this demo)
 - **Synthetic data:** MIT License (part of this repository)
