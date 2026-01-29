@@ -814,7 +814,6 @@ from the **American Diabetes Association**, **National Eye Institute**, and
                 chatbot = gr.Chatbot(
                     label="Conversation",
                     height=400,
-                    type="messages",
                 )
 
                 with gr.Row():
