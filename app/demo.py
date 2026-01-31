@@ -395,8 +395,29 @@ def run_qa_inference(question: str, patient_context: str) -> str:
         )
 
     response = processor.tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+    # Extract model response after the prompt
     if "<start_of_turn>model" in response:
         response = response.split("<start_of_turn>model")[-1].strip()
+
+    # Remove any remaining prompt text (the system prompt is very long)
+    # Look for where the actual answer starts - usually after "model" and before actual content
+    # The answer should not contain the system prompt markers
+    if "AUTHORITATIVE GUIDANCE:" in response or "Patient question:" in response:
+        # The model echoed the prompt - extract just the answer
+        # Find the last occurrence of "Patient question:" and take content after it
+        if "Patient question:" in response:
+            parts = response.split("Patient question:")
+            if len(parts) > 1:
+                # Get everything after the last "Patient question: {question}"
+                answer_part = parts[-1]
+                # Remove the question itself (it's repeated)
+                if question in answer_part:
+                    answer_part = answer_part.replace(question, "", 1).strip()
+                # Remove any "model" prefix
+                if answer_part.startswith("model"):
+                    answer_part = answer_part[5:].strip()
+                response = answer_part
 
     return response
 
