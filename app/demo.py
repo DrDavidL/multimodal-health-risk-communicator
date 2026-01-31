@@ -723,6 +723,25 @@ def _fallback_qa(question):
 # Gradio Interface
 # ---------------------------------------------------------------------------
 
+def get_model_status():
+    """Get current model loading status for display."""
+    if _model_state["model"] is None:
+        return "⏳ Model not loaded (will load on first analysis)"
+
+    status_parts = ["✅ MedGemma 4B loaded"]
+    if _model_state["dr_adapter_loaded"]:
+        status_parts.append("✅ DR adapter ready")
+    else:
+        status_parts.append("❌ DR adapter missing")
+
+    if _model_state["report_adapter_loaded"]:
+        status_parts.append("✅ Report adapter ready")
+    else:
+        status_parts.append("⚠️ Report adapter missing (using templates)")
+
+    return " | ".join(status_parts)
+
+
 def create_demo():
     """Create the Gradio demo application."""
 
@@ -741,6 +760,9 @@ Upload a retinal fundus image to receive a probabilistic health risk assessment 
 
 *All inference runs on a single MedGemma 4B model with efficient adapter swapping.*
         """)
+
+        # Model status indicator
+        model_status = gr.Markdown(value=get_model_status, every=5)
 
         # Store context for Q&A
         qa_context_state = gr.State("")
