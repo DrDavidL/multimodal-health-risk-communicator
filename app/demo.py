@@ -345,11 +345,18 @@ def run_report_generation(p_dr: float, grade: str, urgency: str,
         )
 
     response = processor.tokenizer.decode(outputs[0], skip_special_tokens=True)
+
     # Extract model response after the prompt
+    # MedGemma uses Gemma chat template: <start_of_turn>user\n{prompt}<end_of_turn>\n<start_of_turn>model\n{response}
     if "<start_of_turn>model" in response:
         response = response.split("<start_of_turn>model")[-1].strip()
-    elif prompt[:50] in response:
-        response = response.split(prompt[:50])[-1].strip()
+
+    # Remove any remaining prompt text (fallback)
+    # Look for the start of the actual response sections
+    for marker in ["Understanding Your Retinal Screening Results", "## Understanding Your"]:
+        if marker in response:
+            response = response[response.index(marker):]
+            break
 
     return response
 
