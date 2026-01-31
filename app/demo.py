@@ -627,14 +627,19 @@ def analyze_retina(
             clinical_context, cgm_context
         )
 
-    # Context for Q&A agent
-    qa_context = f"""- P(DR): {p_dr:.2f} ({pct}%)
-- Urgency: {urgency}
-- Grade: {grade} ({grade_code})
-- Diabetes: {diabetes_type or 'Unknown'}
+    # Context for Q&A agent - be explicit about DR status
+    has_dr_text = "YES - diabetic retinopathy detected" if has_dr else "NO - no diabetic retinopathy detected"
+    qa_context = f"""SCREENING RESULTS:
+- Diabetic retinopathy detected: {has_dr_text}
+- Probability of DR: {pct}%
+- Severity grade: {grade} (grade {grade_code})
+- Urgency level: {urgency}
+
+PATIENT INFORMATION:
+- Diabetes type: {diabetes_type or 'Unknown'}
 - HbA1c: {hba1c or 'Not provided'}%
-- CGM avg glucose: {cgm_avg_glucose or 'Not provided'} mg/dL
-- CGM time in range: {cgm_time_in_range or 'Not provided'}%"""
+- CGM average glucose: {cgm_avg_glucose or 'Not provided'} mg/dL
+- CGM time in range (70-180): {cgm_time_in_range or 'Not provided'}%"""
 
     return analysis_summary, patient_report, qa_context
 
