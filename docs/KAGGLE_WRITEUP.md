@@ -135,7 +135,7 @@ From GPT-5.2 judge feedback:
 
 - **Model:** [huggingface.co/dliebovi/medgemma-stage2-report](https://huggingface.co/dliebovi/medgemma-stage2-report)
 - **Demo:** [huggingface.co/spaces/dliebovi/dr-screening-assistant](https://huggingface.co/spaces/dliebovi/dr-screening-assistant)
-- **Code:** [github.com/DrDavidL/multimodal-health-risk-communicator](https://github.com/DrDavidL/multimodal-health-risk-communicator)
+- **Code:** [github.com/drdavidl/multimodal-health-risk-communicator](https://github.com/drdavidl/multimodal-health-risk-communicator)
 - **Video:** [3-minute demo video] *(to be linked)*
 
 ### Dataset

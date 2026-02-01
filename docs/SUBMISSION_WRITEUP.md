@@ -73,7 +73,7 @@ Clinical + CGM data ────→ Stage 2 LoRA → Patient Report + Q&A
 **Public Artifacts:**
 - Model: [huggingface.co/dliebovi/medgemma-stage2-report](https://huggingface.co/dliebovi/medgemma-stage2-report)
 - Demo: [huggingface.co/spaces/dliebovi/dr-screening-assistant](https://huggingface.co/spaces/dliebovi/dr-screening-assistant)
-- Code: [github.com/DrDavidL/multimodal-health-risk-communicator](https://github.com/DrDavidL/multimodal-health-risk-communicator)
+- Code: [github.com/drdavidl/multimodal-health-risk-communicator](https://github.com/drdavidl/multimodal-health-risk-communicator)
 
 **Dataset:** AI-READI (Bridge2AI Program) — 2,280 participants with retinal images, CGM, and clinical data.
 
