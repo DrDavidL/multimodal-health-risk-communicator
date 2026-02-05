@@ -38,11 +38,13 @@ We designed a dual-adapter architecture where two LoRA adapters share one MedGem
 
 | Component | Adapter | Function |
 |-----------|---------|----------|
-| DR Detection | Community LoRA ([qizunlee/medgemma-4b-it-sft-lora-diabetic-retinopathy](https://huggingface.co/qizunlee/medgemma-4b-it-sft-lora-diabetic-retinopathy)) | Retinal image → DR probability grades |
+| DR Detection | Community LoRA ([qizunlee/medgemma-4b-it-sft-lora-diabetic-retinopathy](https://huggingface.co/qizunlee/medgemma-4b-it-sft-lora-diabetic-retinopathy))* | Retinal image → DR probability grades |
 | Report Generation | Our Novel LoRA ([dliebovi/medgemma-stage2-report](https://huggingface.co/dliebovi/medgemma-stage2-report)) | Probabilities + clinical context → Patient-friendly report |
 | Lifestyle Q&A | Same Stage 2 LoRA | Interactive guidance grounded on ADA/NEI/AAO guidelines |
 
 **Key Innovation:** We fine-tuned MedGemma specifically to communicate risk using natural frequencies rather than confusing percentages, trained on 43 AI-READI participants with GPT-5.2-generated gold-standard reports as training targets.
+
+*\*We initially trained our own DR detection model on AI-READI images but achieved 0% sensitivity despite 83% accuracy—unacceptable for screening where false negatives are costly. We made the clinically responsible choice to use the proven community adapter (100% sensitivity at threshold 0.05).*
 
 **Evaluation Results (7 held-out participants, GPT-5.2 as judge):**
 
@@ -58,9 +60,9 @@ We designed a dual-adapter architecture where two LoRA adapters share one MedGem
 
 **Product Feasibility**
 
-- **Edge AI Ready:** Full pipeline runs on Apple M4 Mac (18GB VRAM) without cloud dependencies—suitable for offline clinic deployment
+- **Edge AI Ready:** Full pipeline runs on Apple M4 MacBook Pro (64GB RAM) without cloud dependencies—suitable for offline clinic deployment
 - **Multimodal Integration:** Combines retinal fundus images, CGM glucose data (Open mHealth JSON), and clinical measurements (OMOP CDM) via unified data loaders
-- **Privacy Compliant:** LoRA adapters contain <1% of parameters, anonymized IDs, 2% value jittering—no patient data in released weights (AI-READI DUA Section 3.D compliant)
+- **Privacy Compliant:** LoRA adapters train only 0.76% of parameters (minimizing memorization capacity), all participant IDs anonymized to P1000–P1054 (AI-READI DUA Section 3.D compliant)
 - **Configurable Sensitivity:** Healthcare organizations can adjust DR detection thresholds for their clinical context
 
 **Architecture:**

@@ -95,9 +95,9 @@ report = processor.decode(outputs[0], skip_special_tokens=True)
 ## Privacy & Compliance
 
 - Trained under AI-READI Data Use Agreement (DUA Section 3.D)
-- LoRA adapters contain <1% of base model parameters — minimizes memorization risk
+- LoRA adapters train only 0.76% of base model parameters — minimizes memorization capacity
 - All participant IDs anonymized (P1000–P1054)
-- Numeric values jittered by 2% during training
+- No raw patient data included in adapter weights
 - No patient data is stored in adapter weights
 
 ## Part Of
